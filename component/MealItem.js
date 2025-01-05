@@ -8,17 +8,23 @@ import {
 } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import MealDetails from "./MealDetails";
 
-const MealItem = ({id, title, imageUrl, duration, complexity, affordability }) => {
+const MealItem = ({
+  id,
+  title,
+  imageUrl,
+  duration,
+  complexity,
+  affordability,
+}) => {
+  const navigation = useNavigation();
 
-    const navigation = useNavigation();
-
-    function selectMealItemHandler() { 
-
-        navigation.navigate("Meal Details", {
-            mealId: id
-        })
-    }
+  function selectMealItemHandler() {
+    navigation.navigate("Meal Details", {
+      mealId: id,
+    });
+  }
 
   return (
     <View style={styles.mealItem}>
@@ -32,7 +38,7 @@ const MealItem = ({id, title, imageUrl, duration, complexity, affordability }) =
             <Image style={styles.image} source={{ uri: imageUrl }} />
             <Text style={styles.title}>{title}</Text>
           </View>
-          <View style={styles.details}>
+          {/* <View style={styles.details}>
             <Text style={styles.detailItem}>Duration: {duration}m</Text>
             <Text style={styles.detailItem}>
               Complexity: {complexity.toUpperCase()}
@@ -40,7 +46,12 @@ const MealItem = ({id, title, imageUrl, duration, complexity, affordability }) =
             <Text style={styles.detailItem}>
               Affordability: {affordability.toUpperCase()}{" "}
             </Text>
-          </View>
+          </View> */}
+          <MealDetails
+            duration={duration}
+            complexity={complexity}
+            affordability={affordability}
+          />
         </View>
       </Pressable>
     </View>
