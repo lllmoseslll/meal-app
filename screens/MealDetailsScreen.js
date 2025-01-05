@@ -1,27 +1,49 @@
-import { Button, Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useLayoutEffect } from "react";
+import {
+  Button,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useContext, useLayoutEffect } from "react";
 import { MEALS } from "../data/dummy-data";
 import MealDetails from "../component/MealDetails";
 import Subtitle from "../component/MealDetail/Subtitle";
 import List from "../component/MealDetail/List";
 import IconButton from "../component/IconButton";
+import { FavoritesContext } from "../store/context/favorites-context";
 
 const MealDetailsScreen = ({ route, navigation }) => {
+  const favoriteMealsCtx = useContext(FavoritesContext);
   const mealId = route.params.mealId;
 
-    const selectedMeal = MEALS.find((meal) => meal.id === mealId);
-    
-    function headerButtonPressHandler(){
-        console.log('pressed');
-    }
+  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => {
-                return <IconButton icon={'star'} color={'white'} onPress={headerButtonPressHandler} />
-           }
-       }) 
-    },[navigation, headerButtonPressHandler])
+  const mealIsFavorite = favoriteMealsCtx.ids.includes(mealId);
+
+  function changeFavoriteStatusHandler() {
+    console.log("pressed");
+    if (mealIsFavorite) {
+      favoriteMealsCtx.removeFavorite(mealId);
+    } else {
+      favoriteMealsCtx.addFavorite(mealId);
+    }
+  }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <IconButton
+            icon={mealIsFavorite ? "star" : "star-outline"}
+            color={"white"}
+            onPress={changeFavoriteStatusHandler}
+          />
+        );
+      },
+    });
+  }, [navigation, changeFavoriteStatusHandler]);
 
   return (
     <ScrollView>
@@ -73,8 +95,8 @@ const styles = StyleSheet.create({
   },
   detailText: {
     color: "white",
-    },
+  },
   rootContainer: {
     marginBottom: 32,
-  }
+  },
 });
