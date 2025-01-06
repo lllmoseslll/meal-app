@@ -9,6 +9,8 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import FavoritesScreen from "./screens/FavoritesScreen";
 import { Ionicons } from "@expo/vector-icons";
 import FavoritesContextProvider from "./store/context/favorites-context";
+import { Provider } from "react-redux";
+import { store } from "./store/redux/store";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -55,36 +57,38 @@ export default function App() {
     <>
       <StatusBar style="light" />
       <FavoritesContextProvider>
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              headerStyle: { backgroundColor: "#441b03" },
-              headerTintColor: "white",
-              contentStyle: { backgroundColor: "#7c4420" },
-            }}
-          >
-            <Stack.Screen
-              name="Drawer"
-              component={DrawerNavigator}
-              options={{
-                headerShown: false,
+        <Provider store={store}>
+          <NavigationContainer>
+            <Stack.Navigator
+              screenOptions={{
+                headerStyle: { backgroundColor: "#441b03" },
+                headerTintColor: "white",
+                contentStyle: { backgroundColor: "#7c4420" },
               }}
-            />
-            <Stack.Screen
-              name="Meals Overview"
-              component={MealsOverviewScreen}
-            />
-            <Stack.Screen
-              name="Meal Details"
-              component={MealDetailsScreen}
-              options={{
-                headerRight: () => {
-                  return <Button title="Save" />;
-                },
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
+            >
+              <Stack.Screen
+                name="Drawer"
+                component={DrawerNavigator}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="Meals Overview"
+                component={MealsOverviewScreen}
+              />
+              <Stack.Screen
+                name="Meal Details"
+                component={MealDetailsScreen}
+                options={{
+                  headerRight: () => {
+                    return <Button title="Save" />;
+                  },
+                }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </Provider>
       </FavoritesContextProvider>
     </>
   );
